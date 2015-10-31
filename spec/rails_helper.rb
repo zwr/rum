@@ -26,9 +26,6 @@ require 'rspec/rails'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-# Do not show a lot of Mongo traces, only warnings and worse!
-Mongo::Logger.logger.level = Logger::WARN
-
 # Check what Rubocop has to say about the code
 RuboCop::CLI.new.run
 
