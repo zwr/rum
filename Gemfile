@@ -18,7 +18,13 @@ gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 
+gem 'doorkeeper'
+
 group :development, :test do
+  # following makes sure we use old parser - this might be a problem and should
+  # be removed if it becomes a problem. The reason it is here is that newer
+  # parser shows an annoying message about Ruby MRI.
+  gem 'parser', '2.2.2.5'
   gem 'rspec-rails'
   gem 'spring'
   gem 'rubocop'
