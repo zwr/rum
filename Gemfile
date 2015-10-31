@@ -21,5 +21,5 @@ gem 'jbuilder', '~> 2.0'
 group :development, :test do
   gem 'rspec-rails'
   gem 'spring'
+  gem 'rubocop'
 end
-
