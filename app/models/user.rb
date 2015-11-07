@@ -5,4 +5,17 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   has_many :memberships
   has_many :organizations, through: :memberships
+
+  def owned_organizations
+    memberships.select { |m| m.membership_type.to_sym == :admin }.map(&:organization)
+  end
+
+  def administers?(organization)
+    organization = Organization.find_by name: organization.capitalize unless organization.is_a? Organization
+    owned_organizations.include? organization
+  end
+
+  def superadmin?
+    administers? :balboa
+  end
 end

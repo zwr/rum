@@ -4,17 +4,22 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_user || redirect_to(new_user_session_path)
+    if user_signed_in?
+      current_user
+    else
+      session[:previous_url] = request.fullpath unless request.fullpath =~ /\/users/
+      redirect_to(new_user_session_path)
+    end
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications,
   # you need to declare the block below.
   admin_authenticator do
     if user_signed_in?
-      if current_user.admin?
+      if current_user.superadmin?
         current_user
       else
-        redirect_to('/404.html')
+        fail ActionController::RoutingError, 'Not Found'
       end
     else
       redirect_to(new_user_session_path)
