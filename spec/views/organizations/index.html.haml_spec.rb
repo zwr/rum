@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'organizations/index', type: :view do
+  login_superadmin
   before(:each) do
     assign(:organizations, [
       Organization.create!(name: 'Name'),

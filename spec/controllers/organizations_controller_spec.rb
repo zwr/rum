@@ -19,6 +19,16 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe OrganizationsController, type: :controller do
+  describe 'Superadmin actions' do
+    login_superadmin
+    describe 'GET #new' do
+      it 'assigns a new organization as @organization' do
+        get :new, {}, valid_session
+        expect(assigns(:organization)).to be_a_new(Organization)
+      end
+    end
+  end
+
   # This should return the minimal set of attributes required to create a valid
   # Organization. As you add validations to Organization, be sure to
   # adjust the attributes here as well.
@@ -48,13 +58,6 @@ RSpec.describe OrganizationsController, type: :controller do
       organization = Organization.create! valid_attributes
       get :show, { id: organization.to_param }, valid_session
       expect(assigns(:organization)).to eq(organization)
-    end
-  end
-
-  describe 'GET #new' do
-    it 'assigns a new organization as @organization' do
-      get :new, {}, valid_session
-      expect(assigns(:organization)).to be_a_new(Organization)
     end
   end
 
