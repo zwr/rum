@@ -37,6 +37,20 @@ Doorkeeper::Application.create! name: 'rpm',
                                 secret: '96a730fb7a806fc1f6cb8e52b7d1f40b5314126978dad977bfcb5682c922760c',
                                 redirect_uri: "http://#{MyGuessOfIntranetIp}:3001/auth/"
 
+Doorkeeper::Application.create! name: 'goldmill',
+                                uid: '98dab9fa1c5e18f38bbe68ba149b58cc5e7b1f3290aca30b9d582fc65cae39d2',
+                                secret: '7875fbdd7fa8ddb90db2c914543277bdf41280386d246c9a2a7c08b214abcfd0',
+                                redirect_uri: "http://#{MyGuessOfIntranetIp}:3002/auth/"
+
+Doorkeeper::Application.create! name: 'rwm',
+                                uid: '08bcd408664a336218897c7979e1a039cfdf9952a0de7e1c1234ca9fb155a21f',
+                                secret: '4f13b313752b9a9e5bc169fa1129f78bcc0f73b3bcf15a0aca1d64567c05ff47',
+                                redirect_uri: "http://#{MyGuessOfIntranetIp}:3003/auth/"
+
+Doorkeeper::Application.create! name: 'prodman',
+                                uid: '3001479fa00f39c647881710a32af87a621575e6241cb5cf3ce267f2a4604474',
+                                secret: 'ca0dc82ff1196075257f7f4f1d29c85011021f36efa6de276eacfee2150f8c91',
+                                redirect_uri: "http://#{MyGuessOfIntranetIp}:3004/auth/"
 puts "Seeded #{Doorkeeper::Application.count} apps."
 
 Organization.create! name: 'Balboa', # this is the admin Application
@@ -50,6 +64,23 @@ m.save!
 m = Organization.new name: 'Celesta'
 m.users << User.all.sample(3)
 m.memberships.first.membership_type = 'admin'
+m.save!
+
+m = Organization.new name: 'Wood Company Ltd'
+m.users << User.all.sample(16)
+m.memberships.first.membership_type = 'admin'
+m.save!
+
+m = Organization.new name: 'Tool Rent Oy'
+m.users << User.all.sample(21)
+m.memberships.first.membership_type = 'admin'
+m.save!
+
+m = Organization.new name: 'Food Shop'
+m.users << User.all.sample(7)
+m.memberships[0].membership_type = 'admin'
+m.memberships[3].membership_type = 'admin'
+m.memberships[4].membership_type = 'admin'
 m.save!
 
 puts "Seeded #{Organization.count} organizations."
