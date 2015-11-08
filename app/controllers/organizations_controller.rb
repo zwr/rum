@@ -4,7 +4,11 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    @organizations = Organization.all
+    if current_user.superadmin?
+      @organizations = Organization.all
+    else
+      @organizations = current_user.organizations
+    end
   end
 
   # GET /organizations/1
@@ -14,16 +18,19 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/new
   def new
+    fail Rck::NotSuperAdminError unless current_user.superadmin?
     @organization = Organization.new
   end
 
   # GET /organizations/1/edit
   def edit
+    fail NotSuperAdminError unless current_user.administers? @organization
   end
 
   # POST /organizations
   # POST /organizations.json
   def create
+    fail NotSuperAdminError unless current_user.superadmin?
     @organization = Organization.new(organization_params)
 
     respond_to do |format|
@@ -40,6 +47,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
+    fail NotSuperAdminError unless current_user.administers? @organization
     respond_to do |format|
       if @organization.update(organization_params)
         format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
@@ -54,6 +62,7 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1
   # DELETE /organizations/1.json
   def destroy
+    fail NotSuperAdminError unless current_user.administers? @organization
     @organization.destroy
     respond_to do |format|
       format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.' }
@@ -66,6 +75,8 @@ class OrganizationsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_organization
     @organization = Organization.find(params[:id])
+    fail ActionController::RoutingError, 'Not Found' unless current_user.superadmin? ||
+                                                            @organization.users.include?(current_user)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

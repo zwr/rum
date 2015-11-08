@@ -11,11 +11,12 @@ class User < ActiveRecord::Base
   end
 
   def administers?(organization)
+    return true if superadmin?
     organization = Organization.find_by name: organization.capitalize unless organization.is_a? Organization
     owned_organizations.include? organization
   end
 
   def superadmin?
-    administers? :balboa
+    owned_organizations.include? Organization.balboa
   end
 end

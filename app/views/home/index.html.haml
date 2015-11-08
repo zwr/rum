@@ -1,0 +1,10 @@
+%h1 Balboa Home
+- unless user_signed_in?
+  %p 
+    You are not logged in. Log in 
+    =link_to 'here.', new_user_session_path
+- else
+  %p You are logged in as #{ current_user.email }
+  %p
+    =link_to 'Here', organizations_path
+    you can see organizations you belong to.

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-  devise_scope(:user) { get 'logout', to: 'devise/sessions#destroy' }
+  devise_scope(:user) { get 'users/logout', to: 'devise/sessions#destroy' }
   use_doorkeeper
   root to: 'home#index'
 end

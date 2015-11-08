@@ -1,21 +1,21 @@
-%h1 Listing organizations
+%h1 Listing your organizations
 
 %table
   %thead
-    %tr
-      %th Name
-      %th
-      %th
-      %th
 
   %tbody
     - @organizations.each do |organization|
       %tr
-        %td= organization.name
-        %td= link_to 'Show', organization
-        %td= link_to 'Edit', edit_organization_path(organization)
-        %td= link_to 'Destroy', organization, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td
+          %h3= link_to organization.name, organization_path(organization) if current_user.administers? organization
+        %td= link_to 'Edit', edit_organization_path(organization) if current_user.superadmin?
+        %td= link_to 'Destroy', organization, :method => :delete, :data => { :confirm => 'Are you sure?' } if current_user.superadmin?
+      - organization.memberships.each do |membership|
+        %tr
+          %td
+            = membership.user.email
+            %strong= '(admin)' if membership.admin?
 
 %br
 
-= link_to 'New Organization', new_organization_path
+= link_to 'New Organization', new_organization_path if current_user.superadmin?
