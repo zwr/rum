@@ -5,9 +5,6 @@ Membership.delete_all
 User.delete_all
 Organization.delete_all
 
-rocky = User.create! email: 'rocky@zwr.fi', password: 'balboa123'
-z = User.create! email: 'z@zwr.fi', password: 'balboa123', admin: true
-
 File.open(Rails.root.join 'db', 'seeds', 'users.csv').each_with_index do |line, count|
   u = line.split ','
   User.create! email: u[6], password: u[8]
@@ -28,7 +25,6 @@ File.open(Rails.root.join 'db', 'seeds', 'users.csv').each_with_index do |line, 
 
   break if count > 10
 end
-puts "Seeded #{User.count} users."
 
 MyGuessOfIntranetIp = `ifconfig`.scan(/inet ([\.\d]+)/).flatten.find { |x| x != '127.0.0.1' }
 
@@ -53,14 +49,6 @@ Doorkeeper::Application.create! name: 'prodman',
                                 redirect_uri: "http://#{MyGuessOfIntranetIp}:3004/auth/"
 puts "Seeded #{Doorkeeper::Application.count} apps."
 
-Organization.create! name: 'Balboa', # this is the admin Application
-                     memberships: [Membership.new(user: z, membership_type: 'admin')]
-
-m = Organization.new name: 'Mohican'
-m.memberships.new user: rocky, membership_type: 'admin'
-m.users << User.all.sample(5)
-m.save!
-
 m = Organization.new name: 'Celesta'
 m.users << User.all.sample(3)
 m.memberships.first.membership_type = 'admin'
@@ -83,4 +71,17 @@ m.memberships[3].membership_type = 'admin'
 m.memberships[4].membership_type = 'admin'
 m.save!
 
+m = Organization.new name: 'Mohican'
+m.users << User.all.sample(5)
+
+rocky = User.create! email: 'rocky@zwr.fi', password: 'balboa123'
+z = User.create! email: 'z@zwr.fi', password: 'balboa123', admin: true
+
+m.memberships.new user: rocky, membership_type: 'admin'
+m.save!
+
+Organization.create! name: 'Balboa', # this is the admin Application
+                     memberships: [Membership.new(user: z, membership_type: 'admin')]
+
+puts "Seeded #{User.count} users."
 puts "Seeded #{Organization.count} organizations."

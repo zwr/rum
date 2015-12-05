@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :organizations
   namespace :api, defaults: { format: 'json' } do
     get 'user/info'
+    post 'user/logout'
   end
 
   devise_for :users
